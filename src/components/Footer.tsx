@@ -7,10 +7,8 @@ export default function Footer() {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 bg-[var(--accent)] flex items-center justify-center">
-                <svg viewBox="0 0 100 100" className="w-4 h-4 text-[var(--accent-foreground)]">
-                  <polygon points="30,20 70,20 50,50 70,80 30,80 50,50" fill="currentColor" />
-                </svg>
+              <div className="flex items-center justify-center">
+                <img src="/Logo/logo.png" alt="Rethink Fitness Logo" className="h-8 w-auto object-contain" />
               </div>
               <span className="text-sm font-[700] tracking-[0.12em] font-[Oswald] text-[var(--foreground)]">
                 RETHINK

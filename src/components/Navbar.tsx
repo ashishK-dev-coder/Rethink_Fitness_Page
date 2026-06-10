@@ -13,13 +13,8 @@ export default function Navbar() {
       <div className="container flex items-center justify-between h-[72px]">
         {/* Logo */}
         <a href="#" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 bg-[var(--accent)] flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_15px_-2px] group-hover:shadow-[var(--accent)]/40">
-            <svg viewBox="0 0 100 100" className="w-5 h-5 text-[var(--accent-foreground)]">
-              <polygon
-                points="30,20 70,20 50,50 70,80 30,80 50,50"
-                fill="currentColor"
-              />
-            </svg>
+          <div className="flex items-center justify-center transition-all duration-300 group-hover:opacity-80">
+            <img src="/Logo/logo.png" alt="Rethink Fitness Logo" className="h-14 md:h-10 w-auto object-contain" />
           </div>
           <span className="text-base font-[700] tracking-[0.15em] font-[Oswald] hidden sm:inline text-[var(--foreground)]">
             RETHINK
