@@ -4,14 +4,23 @@ import { useState } from "react";
 import { Play } from "lucide-react";
 import { motion } from "framer-motion";
 import contentData from "@/data/content.json";
+import SectionCorners from "./SectionCorners";
 
 export default function VideoSection() {
   const [videoPlaying, setVideoPlaying] = useState(false);
   const { video } = contentData.home;
 
   return (
-    <section className="py-20 md:py-32 bg-[var(--secondary)] transition-colors duration-400">
-      <div className="container">
+    <section className="py-24 md:py-36 bg-[#050505] relative overflow-hidden">
+      <SectionCorners />
+      {/* Ghost BG text */}
+      <div className="absolute inset-0 flex items-center justify-end pr-4 pointer-events-none select-none overflow-hidden">
+        <span className="text-[18vw] font-[900] font-[Oswald] text-white/[0.02] tracking-tight uppercase leading-none">
+          STORY
+        </span>
+      </div>
+
+      <div className="container relative z-10">
         <div className="max-w-5xl mx-auto">
           {/* Section Header */}
           <motion.div
@@ -22,16 +31,22 @@ export default function VideoSection() {
             className="text-center mb-12 md:mb-16"
           >
             <div className="flex items-center justify-center gap-3 mb-5">
-              <div className="h-[2px] w-6 bg-[var(--accent)]" />
-              <span className="text-xs font-semibold tracking-[0.25em] text-[var(--muted)] uppercase">
+              <div
+                className="h-[2px] w-8"
+                style={{ background: "#CC0000", boxShadow: "0 0 8px rgba(204,0,0,0.8), 0 0 20px rgba(204,0,0,0.4)" }}
+              />
+              <span className="text-[11px] font-bold tracking-[0.3em] uppercase text-glow-red">
                 {video.eyeBrow}
               </span>
-              <div className="h-[2px] w-6 bg-[var(--accent)]" />
+              <div
+                className="h-[2px] w-8"
+                style={{ background: "#CC0000", boxShadow: "0 0 8px rgba(204,0,0,0.8), 0 0 20px rgba(204,0,0,0.4)" }}
+              />
             </div>
-            <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-[800] tracking-[-0.02em] text-[var(--foreground)] mb-5">
+            <h2 className="text-[clamp(2.5rem,5vw,4rem)] font-[900] tracking-[-0.03em] text-white leading-[0.92] mb-5">
               {video.headline}
             </h2>
-            <p className="text-[var(--muted)] text-base md:text-lg max-w-xl mx-auto leading-relaxed">
+            <p className="text-[#BBBBBB] text-base md:text-lg max-w-xl mx-auto leading-relaxed">
               {video.subtext}
             </p>
           </motion.div>
@@ -42,8 +57,16 @@ export default function VideoSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="relative w-full overflow-hidden shadow-[0_20px_60px_-15px_rgba(0,0,0,0.5)] border border-[var(--border)]"
+            className="relative w-full overflow-hidden"
+            style={{
+              boxShadow: "0 20px 60px -15px rgba(0,0,0,0.5), 0 0 0 1px rgba(204,0,0,0.25)",
+            }}
           >
+            {/* Outer glow border */}
+            <div
+              className="absolute inset-0 z-10 pointer-events-none"
+              style={{ boxShadow: "inset 0 0 0 1px rgba(204,0,0,0.3), 0 0 30px rgba(204,0,0,0.15)" }}
+            />
             <div className="relative pt-[56.25%]">
               {!videoPlaying ? (
                 <div
@@ -57,23 +80,27 @@ export default function VideoSection() {
                     alt="Video Thumbnail"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors duration-300" />
-                  <motion.button
-                    whileHover={{ scale: 1.08 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="relative z-10 w-20 h-20 md:w-24 md:h-24 bg-[var(--accent)] rounded-full flex items-center justify-center shadow-[0_0_40px_8px] shadow-[var(--accent)]/20 transition-colors duration-300"
+                  <div className="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-colors duration-500" />
+                  
+                  {/* Play Button */}
+                  <div
+                    className="relative z-10 w-20 h-20 md:w-24 md:h-24 bg-[var(--accent)] rounded-full flex items-center justify-center transition-transform duration-300 group-hover:scale-110"
+                    style={{
+                      boxShadow: "0 0 30px rgba(204,0,0,0.6), 0 0 60px rgba(204,0,0,0.3)",
+                      animation: "glow-pulse 2.5s ease-in-out infinite"
+                    }}
                   >
-                    <Play className="w-7 h-7 md:w-9 md:h-9 text-[var(--accent-foreground)] ml-1" fill="currentColor" />
-                  </motion.button>
+                    <Play className="w-7 h-7 md:w-9 md:h-9 text-white ml-1" fill="currentColor" />
+                  </div>
                   
                   {/* Duration badge */}
-                  <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-white/90 tracking-wide">
+                  <div className="absolute bottom-5 right-5 bg-[#050505]/90 border border-[rgba(204,0,0,0.4)] backdrop-blur-sm px-4 py-2 text-[11px] font-bold text-white tracking-[0.15em]">
                     {video.duration}
                   </div>
                 </div>
               ) : (
                 <iframe
-                  className="absolute inset-0 w-full h-full"
+                  className="absolute inset-0 w-full h-full z-20"
                   src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
                   title="Rethink Fitness - Video Sales Letter"
                   frameBorder="0"
@@ -93,12 +120,21 @@ export default function VideoSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: 0.1 * idx }}
-                className="bg-[var(--background)] p-5 md:p-7 border border-[var(--border)] text-center hover:border-[var(--accent)]/40 transition-all duration-300"
+                className="bg-[#0C0C0C] p-6 md:p-8 border border-[var(--border)] text-center transition-all duration-300 hover:border-[rgba(204,0,0,0.4)] group"
+                style={{
+                  transition: "border-color 0.3s, box-shadow 0.3s",
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(204,0,0,0.1), inset 0 0 15px rgba(204,0,0,0.05)";
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
+                }}
               >
-                <p className="text-[var(--accent)] font-[800] text-lg md:text-2xl font-[Oswald] tracking-tight">
+                <p className="text-3xl md:text-4xl font-[900] text-shimmer font-[Oswald] tracking-tight leading-none group-hover:text-white transition-colors duration-300">
                   {item.value}
                 </p>
-                <p className="text-[11px] md:text-xs text-[var(--muted)] mt-1.5 uppercase tracking-[0.1em]">
+                <p className="text-[10px] md:text-[11px] text-[var(--muted)] mt-2 uppercase tracking-[0.2em] font-medium">
                   {item.label}
                 </p>
               </motion.div>
