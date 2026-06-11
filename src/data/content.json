@@ -137,9 +137,18 @@
       "eyeBrow": "Results",
       "headline": "CLIENT STORIES",
       "images": [
-        "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-01-eoQTuXABYgKMDnAsMW2zTh.webp",
-        "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-02-3J94QdKSs6ne5f5xBVnHXJ.webp",
-        "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-03-UmwKqVnb2KsxJnRppiKFPD.webp"
+        "/Clients/client-01.png",
+        "/Clients/client-02.png",
+        "/Clients/client-03.png",
+        "/Clients/client-04.png",
+        "/Clients/client-05.png",
+        "/Clients/client-06.png",
+        "/Clients/client-07.png",
+        "/Clients/client-08.png",
+        "/Clients/client-09.png",
+        "/Clients/client-10.png",
+        "/Clients/client-11.png",
+        "/Clients/client-12.png"
       ]
     },
     "cta": {

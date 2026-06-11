@@ -1,36 +1,43 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import contentData from "@/data/content.json";
 import SectionCorners from "./SectionCorners";
 
 export default function TestimonialsSection() {
   const { testimonials } = contentData.home;
   const testimonialImages = testimonials.images;
-  const [index, setIndex] = useState(0);
-  const [itemsPerView, setItemsPerView] = useState(3);
+  const [[page, direction], setPage] = useState([0, 0]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth < 640) {
-        setItemsPerView(1);
-      } else if (window.innerWidth < 1024) {
-        setItemsPerView(2);
-      } else {
-        setItemsPerView(3);
-      }
-    };
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  // Wrap around index safely
+  const imageIndex = Math.abs(page % testimonialImages.length);
 
-  const maxIndex = Math.max(0, testimonialImages.length - itemsPerView);
+  const paginate = (newDirection: number) => {
+    setPage([page + newDirection, newDirection]);
+  };
 
-  const next = () => setIndex((prev) => Math.min(prev + 1, maxIndex));
-  const prev = () => setIndex((prev) => Math.max(prev - 1, 0));
+  const variants = {
+    enter: (direction: number) => {
+      return {
+        x: direction > 0 ? 1000 : -1000,
+        opacity: 0
+      };
+    },
+    center: {
+      zIndex: 1,
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => {
+      return {
+        zIndex: 0,
+        x: direction < 0 ? 1000 : -1000,
+        opacity: 0
+      };
+    }
+  };
 
   return (
     <section id="testimonials" className="py-24 md:py-36 bg-[#0A0A0A] relative overflow-hidden">
@@ -64,120 +71,114 @@ export default function TestimonialsSection() {
               {testimonials.headline}
             </h2>
           </motion.div>
+        </div>
 
+        {/* Full Image Frame Carousel */}
+        <div 
+          className="relative w-full max-w-4xl mx-auto bg-[#0C0C0C] transition-all duration-300 group overflow-hidden aspect-[3/4] md:aspect-[4/3]"
+          style={{
+            border: "1px solid #1C1C1C",
+            boxShadow: "0 0 30px rgba(0,0,0,0.6)",
+          }}
+          onMouseEnter={(e) => {
+            (e.currentTarget as HTMLElement).style.borderColor = "rgba(204,0,0,0.4)";
+            (e.currentTarget as HTMLElement).style.boxShadow = "0 0 35px rgba(204,0,0,0.25), inset 0 0 20px rgba(204,0,0,0.1)";
+          }}
+          onMouseLeave={(e) => {
+            (e.currentTarget as HTMLElement).style.borderColor = "#1C1C1C";
+            (e.currentTarget as HTMLElement).style.boxShadow = "0 0 30px rgba(0,0,0,0.6)";
+          }}
+        >
+          <AnimatePresence initial={false} custom={direction} mode="popLayout">
+            <motion.div
+              key={page}
+              custom={direction}
+              variants={variants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 }
+              }}
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={1}
+              onDragEnd={(e, { offset, velocity }) => {
+                const swipe = Math.abs(offset.x) * velocity.x;
+                if (swipe < -10000 || offset.x < -50) {
+                  paginate(1);
+                } else if (swipe > 10000 || offset.x > 50) {
+                  paginate(-1);
+                }
+              }}
+              className="absolute inset-0 w-full h-full p-0 md:p-6 flex items-center justify-center cursor-grab active:cursor-grabbing"
+            >
+              <img
+                src={testimonialImages[imageIndex]}
+                alt={`Client Transformation ${imageIndex + 1}`}
+                className="w-full h-full object-contain drop-shadow-2xl pointer-events-none"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Controls & Progress */}
+        <div className="mt-8 max-w-4xl mx-auto flex flex-col sm:flex-row items-center gap-6 md:gap-8">
           {/* Controls */}
-          <div className="flex gap-3 pb-2">
+          <div className="flex gap-3 order-2 sm:order-1">
             <button
-              onClick={prev}
-              disabled={index === 0}
-              className="w-12 h-12 flex items-center justify-center bg-[#0C0C0C] border border-[#1C1C1C] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed group"
+              onClick={() => paginate(-1)}
+              className="w-12 h-12 flex items-center justify-center bg-[#0C0C0C] border border-[#1C1C1C] transition-all duration-300 group hover:border-[rgba(204,0,0,0.5)] hover:bg-[rgba(204,0,0,0.05)]"
               style={{
-                transition: "border-color 0.3s, box-shadow 0.3s, background-color 0.3s",
+                boxShadow: "none",
               }}
               onMouseEnter={(e) => {
-                if (index !== 0) {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(204,0,0,0.5)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(204,0,0,0.2), inset 0 0 10px rgba(204,0,0,0.1)";
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(204,0,0,0.05)";
-                }
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(204,0,0,0.2), inset 0 0 10px rgba(204,0,0,0.1)";
               }}
               onMouseLeave={(e) => {
-                if (index !== 0) {
-                  (e.currentTarget as HTMLElement).style.borderColor = "#1C1C1C";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "#0C0C0C";
-                }
+                (e.currentTarget as HTMLElement).style.boxShadow = "none";
               }}
               aria-label="Previous"
             >
               <ChevronLeft className="w-5 h-5 text-white group-hover:text-[var(--accent)] transition-colors duration-300" />
             </button>
             <button
-              onClick={next}
-              disabled={index === maxIndex}
-              className="w-12 h-12 flex items-center justify-center bg-[#0C0C0C] border border-[#1C1C1C] transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed group"
+              onClick={() => paginate(1)}
+              className="w-12 h-12 flex items-center justify-center bg-[#0C0C0C] border border-[#1C1C1C] transition-all duration-300 group hover:border-[rgba(204,0,0,0.5)] hover:bg-[rgba(204,0,0,0.05)]"
               style={{
-                transition: "border-color 0.3s, box-shadow 0.3s, background-color 0.3s",
+                boxShadow: "none",
               }}
               onMouseEnter={(e) => {
-                if (index !== maxIndex) {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(204,0,0,0.5)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(204,0,0,0.2), inset 0 0 10px rgba(204,0,0,0.1)";
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "rgba(204,0,0,0.05)";
-                }
+                (e.currentTarget as HTMLElement).style.boxShadow = "0 0 15px rgba(204,0,0,0.2), inset 0 0 10px rgba(204,0,0,0.1)";
               }}
               onMouseLeave={(e) => {
-                if (index !== maxIndex) {
-                  (e.currentTarget as HTMLElement).style.borderColor = "#1C1C1C";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "none";
-                  (e.currentTarget as HTMLElement).style.backgroundColor = "#0C0C0C";
-                }
+                (e.currentTarget as HTMLElement).style.boxShadow = "none";
               }}
               aria-label="Next"
             >
               <ChevronRight className="w-5 h-5 text-white group-hover:text-[var(--accent)] transition-colors duration-300" />
             </button>
           </div>
-        </div>
 
-        {/* Carousel */}
-        <div className="overflow-hidden">
-          <motion.div
-            className="flex gap-5"
-            animate={{ x: `-${index * (100 / itemsPerView + (itemsPerView > 1 ? 1.5 : 0))}%` }}
-            transition={{ type: "spring", stiffness: 280, damping: 28 }}
-          >
-            {testimonialImages.map((image, idx) => (
-              <div
-                key={idx}
-                className="flex-shrink-0 aspect-[4/5] overflow-hidden bg-[#0C0C0C] transition-all duration-300 group"
+          {/* Progress indicator */}
+          <div className="flex-1 w-full flex items-center gap-4 order-1 sm:order-2">
+            <div className="flex-1 h-[2px] bg-[#1C1C1C] relative overflow-hidden">
+              <motion.div
+                className="absolute top-0 left-0 bottom-0 bg-[#CC0000]"
                 style={{
-                  width: `calc(${100 / itemsPerView}% - ${
-                    ((itemsPerView - 1) * 20) / itemsPerView
-                  }px)`,
-                  border: "1px solid #1C1C1C",
-                  boxShadow: "0 0 20px rgba(0,0,0,0.5)",
+                  boxShadow: "0 0 10px rgba(204,0,0,0.8)",
                 }}
-                onMouseEnter={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "rgba(204,0,0,0.4)";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 25px rgba(204,0,0,0.2), inset 0 0 15px rgba(204,0,0,0.1)";
+                animate={{
+                  width: `${((imageIndex + 1) / testimonialImages.length) * 100}%`,
                 }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLElement).style.borderColor = "#1C1C1C";
-                  (e.currentTarget as HTMLElement).style.boxShadow = "0 0 20px rgba(0,0,0,0.5)";
-                }}
-              >
-                <img
-                  src={image}
-                  alt={`Client Transformation ${idx + 1}`}
-                  className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500 opacity-90 group-hover:opacity-100"
-                />
-              </div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Progress indicator */}
-        <div className="mt-10 flex items-center gap-4">
-          <div className="flex-1 h-[1px] bg-[#1C1C1C] relative overflow-hidden">
-            <motion.div
-              className="absolute top-0 left-0 bottom-0"
-              style={{
-                background: "linear-gradient(90deg, transparent, #CC0000, #FF5555, #CC0000, transparent)",
-                backgroundSize: "200% 100%",
-                boxShadow: "0 0 8px rgba(204,0,0,0.6)",
-                animation: "shimmer 3s linear infinite",
-              }}
-              animate={{
-                width: `${(1 / testimonialImages.length) * 100}%`,
-                x: `${index * 100}%`,
-              }}
-              transition={{ duration: 0.3 }}
-            />
+                transition={{ duration: 0.3 }}
+              />
+            </div>
+            <span className="text-[12px] text-[var(--muted)] font-bold tracking-[0.2em] tabular-nums">
+              {String(imageIndex + 1).padStart(2, "0")} / {String(testimonialImages.length).padStart(2, "0")}
+            </span>
           </div>
-          <span className="text-[11px] text-[var(--muted)] font-bold tracking-[0.2em] tabular-nums">
-            {String(index + 1).padStart(2, "0")} / {String(maxIndex + 1).padStart(2, "0")}
-          </span>
         </div>
       </div>
     </section>
