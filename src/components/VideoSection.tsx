@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { Play } from "lucide-react";
 import { motion } from "framer-motion";
+import contentData from "@/data/content.json";
 
 export default function VideoSection() {
   const [videoPlaying, setVideoPlaying] = useState(false);
+  const { video } = contentData.home;
 
   return (
     <section className="py-20 md:py-32 bg-[var(--secondary)] transition-colors duration-400">
@@ -22,16 +24,15 @@ export default function VideoSection() {
             <div className="flex items-center justify-center gap-3 mb-5">
               <div className="h-[2px] w-6 bg-[var(--accent)]" />
               <span className="text-xs font-semibold tracking-[0.25em] text-[var(--muted)] uppercase">
-                Our Story
+                {video.eyeBrow}
               </span>
               <div className="h-[2px] w-6 bg-[var(--accent)]" />
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-[800] tracking-[-0.02em] text-[var(--foreground)] mb-5">
-              WATCH THE TRANSFORMATION
+              {video.headline}
             </h2>
             <p className="text-[var(--muted)] text-base md:text-lg max-w-xl mx-auto leading-relaxed">
-              See how we&apos;ve transformed 1000+ lives. The science behind
-              our system, explained in 10 minutes.
+              {video.subtext}
             </p>
           </motion.div>
 
@@ -52,8 +53,8 @@ export default function VideoSection() {
                   aria-label="Play video"
                 >
                   <img
-                    src="https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/gym-facility-dark-U77KW7vk2kZ9Q4SSuVX7hv.webp"
-                    alt="Video Thumbnail - Gym Facility"
+                    src={video.thumbnail}
+                    alt="Video Thumbnail"
                     className="absolute inset-0 w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-black/60 group-hover:bg-black/50 transition-colors duration-300" />
@@ -67,7 +68,7 @@ export default function VideoSection() {
                   
                   {/* Duration badge */}
                   <div className="absolute bottom-4 right-4 bg-black/70 backdrop-blur-sm px-3 py-1.5 text-xs font-medium text-white/90 tracking-wide">
-                    10:24
+                    {video.duration}
                   </div>
                 </div>
               ) : (
@@ -85,11 +86,7 @@ export default function VideoSection() {
 
           {/* Video Stats */}
           <div className="mt-10 md:mt-14 grid grid-cols-3 gap-3 md:gap-5">
-            {[
-              { value: "10 MIN", label: "Watch Time" },
-              { value: "100%", label: "Science-Based" },
-              { value: "FREE", label: "No Card Required" },
-            ].map((item, idx) => (
+            {video.stats.map((item, idx) => (
               <motion.div
                 key={idx}
                 initial={{ opacity: 0, y: 15 }}

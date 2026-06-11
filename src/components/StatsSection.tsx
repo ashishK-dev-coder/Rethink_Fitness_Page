@@ -1,15 +1,11 @@
 "use client";
 
 import { motion } from "framer-motion";
-
-const stats = [
-  { label: "LIVES CHANGED", value: "1,000", suffix: "+" },
-  { label: "SUCCESS RATE", value: "99", suffix: "%" },
-  { label: "BODY FAT LOST", value: "22", suffix: "%" },
-  { label: "YEARS EXPERIENCE", value: "10", suffix: "+" },
-];
+import contentData from "@/data/content.json";
 
 export default function StatsSection() {
+  const stats = contentData.home.statsBar;
+
   return (
     <section className="py-16 md:py-24 relative">
       {/* Top line */}

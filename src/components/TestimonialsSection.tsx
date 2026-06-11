@@ -3,23 +3,11 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
-
-const testimonialImages = [
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-01-eoQTuXABYgKMDnAsMW2zTh.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-02-3J94QdKSs6ne5f5xBVnHXJ.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-03-UmwKqVnb2KsxJnRppiKFPD.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-04-dfJ4yx48uxNT9dMT7E8yDF.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-05-6c73DD8MHiS9sXEigVzV4b.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-06-9PY8ZCYjqrHeaU9gRHv4Ft.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-07-XMPcXtvpNmibJFTtMGR587.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-08-7Hboftk9B3MTZrddePi2Km.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-09-enxyiuULz5wtATDZGQLwUD.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-10-o99U9rzQAMfGNQypjpiEJG.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-11-iA7wrW58i6CSoqNp2FbjGt.webp",
-  "https://d2xsxph8kpxj0f.cloudfront.net/310519663698639650/GCtMDoRQXGjHc28ogHbyFy/testimonial-12-QnZbAMLAnmNJkNyhAUbCVg.webp",
-];
+import contentData from "@/data/content.json";
 
 export default function TestimonialsSection() {
+  const { testimonials } = contentData.home;
+  const testimonialImages = testimonials.images;
   const [index, setIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(3);
 
@@ -57,11 +45,11 @@ export default function TestimonialsSection() {
             <div className="flex items-center gap-3 mb-5">
               <div className="h-[2px] w-8 bg-[var(--accent)]" />
               <span className="text-xs font-semibold tracking-[0.25em] text-[var(--muted)] uppercase">
-                Results
+                {testimonials.eyeBrow}
               </span>
             </div>
             <h2 className="text-4xl md:text-5xl lg:text-[3.5rem] font-[800] tracking-[-0.02em] text-[var(--foreground)]">
-              CLIENT <span className="text-[var(--accent)]">STORIES</span>
+              {testimonials.headline}
             </h2>
           </motion.div>
 
